@@ -15,8 +15,8 @@ int main(){
   }
   
  char s[k+1];
-  printf("\nIngrese la cadena descriptiva [A/P]: ");
-  scanf("%s",&s);
+  printf("\nIngrese la cadena [A/P]: ");
+  scanf("%s",s);
   strupr(s);
 
   int i;
