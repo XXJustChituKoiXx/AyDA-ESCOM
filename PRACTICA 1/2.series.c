@@ -1,7 +1,5 @@
 #include <stdio.h>
-
 #define TAM 3
-
 int verificarProgression(int* aptA,float *dif1,float *dif2){
     
     *dif1 = *(aptA + 1) - *aptA;
