@@ -8,7 +8,7 @@ void swap(char *a,char *b){
     *a = *b;
     *b = temp;
 }
-void permutar(char *cadena, int i,int len, int *counter){
+void permutacion(char *cadena, int i,int len, int *counter){
     int j;
     if(i == len){
         (*counter)++;
@@ -16,7 +16,7 @@ void permutar(char *cadena, int i,int len, int *counter){
     }else{
         for(j = i; j < len; j++){              //recorre el resto de la cadena
             swap((cadena + i),(cadena + j)); //hacer swap
-            permutar(cadena,i+1,len,counter);  //llamada recursiva donde se hace swap  hasta llegar al final de la rama, si ya se llego al final de la cadena -> imprime la cadena y decsase los swaps que hizo para buscar otro camino 
+            permutacion(cadena,i+1,len,counter);  //llamada recursiva donde se hace swap  hasta llegar al final de la rama, si ya se llego al final de la cadena -> imprime la cadena y decsase los swaps que hizo para buscar otro camino 
             swap((cadena + i),(cadena + j)); //revierte el swap (bactrak) una vez se llega al final de la rama para poder buscar otra aun disponible                    
         }
     }
@@ -31,6 +31,6 @@ int main(){
     */
     fgets(cadena,TAM,stdin); 
     cadena[strlen(cadena)-1] = '\0'; //el salto de linea siempre estara al final
-    permutar(cadena,0,strlen(cadena),&counter);
+    permutacion(cadena,0,strlen(cadena),&counter);
     return 0;
 }
