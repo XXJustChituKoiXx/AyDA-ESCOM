@@ -11,8 +11,14 @@ void swapear(char *a,char *b){
     *b = temp;
 }
 void permutacion(char *cadena, int i,int len){
-    if(len == 0) printf("Cadena vacia");
-    if(len == 1) printf("%s",cadena);
+    if(len == 0){
+        printf("Cadena vacia");
+        return;
+    }
+    if(len == 1){
+        printf("%s",cadena);
+        return;
+    }
 
     int j;
     if(i == len){
