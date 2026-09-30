@@ -1,3 +1,4 @@
+//NOGUEZ OJEDA RICARDO GONZALES MARTINEZ DANIEL
 #include <stdio.h>
 #include <string.h>
 #define TAM 15
@@ -25,9 +26,9 @@ void permutacion(char *cadena, int i,int len){
         (global_counter)++;
         printf("\n%d.- %s",global_counter,cadena);
     }else{
-        for(j = i; j < len; j++){              //recorre el resto de la cadena
+        for(j = i; j < len; j++){               //recorre el resto de la cadena
             swapear((cadena + i),(cadena + j)); //hacer swap
-            permutacion(cadena,i+1,len);  //llamada recursiva donde se hace swap  hasta llegar al final de la rama, si ya se llego al final de la cadena -> imprime la cadena y decsase los swaps que hizo para buscar otro camino 
+            permutacion(cadena,i+1,len);        //llamada recursiva donde se hace swap  hasta llegar al final de la rama, si ya se llego al final de la cadena -> imprime la cadena y decsase los swaps que hizo para buscar otro camino 
             swapear((cadena + i),(cadena + j)); //revierte el swap (bactrak) una vez se llega al final de la rama para poder buscar otra aun disponible                    
         }
     }
