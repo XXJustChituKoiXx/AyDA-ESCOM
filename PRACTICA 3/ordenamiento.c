@@ -66,6 +66,12 @@ int main(){
     return 0;
 }
 
+void swap(int*i, int*inx_min){
+        int temp = *i;
+        *i = *inx_min;
+        *inx_min = temp;
+}
+
 void gen_arr(int* arr, int n){
     int min = -10000;
     int max = 10000;
@@ -82,19 +88,16 @@ void print_arr(int* arr, int n){
 }
 
 void bubble_sort(int* arr, int n){
-    int fin = n - 1;
-
-    while(fin > 0){
-        int nuevo_fin = 0;
-        for(int i=0;i<fin;i++){
-            if(arr[i] > arr[i+1]){
-                int temp = arr[i];
-                arr[i] = arr[i+1];
-                arr[i+1] = temp;
-                nuevo_fin = i;
+    int flag;
+    for(int i = 0; i<n-1 ; ++i){
+        flag = 0;
+        for(int j = 0; j < n - i - 1; ++j){
+            if(*(arr + j) > *(arr + j +1)){
+                swap((arr + j) , (arr + j + 1));
+                flag = 1;
             }
         }
-        fin = nuevo_fin;
+        if(flag == 0) break;
     }
 }
 
@@ -102,14 +105,14 @@ void selection_sort(int *A, int n){
     for(int i = 0; i < n - 1; ++i){
         int inx_min = i;
         for(int j = i + 1; j < n ; ++j){
-            if(A[j] < A[inx_min]) 
+            if(*(A+j) < *(A + inx_min)) 
                 inx_min = j;
         }
-        int temp = A[i];
-        A[i] = A[inx_min];
-        A[inx_min] = temp;        
+        if(inx_min != i) swap((A + i),(A + inx_min));        
     }
 }
+
+
 
 void insertion_sort(int* arr, int n){
     for(int i=1;i<n;i++){
