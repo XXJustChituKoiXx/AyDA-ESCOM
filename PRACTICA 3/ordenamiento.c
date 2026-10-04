@@ -4,14 +4,14 @@
 #include <math.h>
 #define INFINITO 99999999
 
-void gen_arr(int*,int);
-void print_arr(int*,int);
-void bubble(int*,int);
-void insertion(int*,int);
-void merge_sort(int *A,int p,int r);
-void merge(int *A,int p,int q,int r);
-void selection_sort(int *A, int n);
-void swap(int *a,int *b);
+void gen_arr(int*, int);
+void print_arr(int*, int);
+void bubble_sort(int*, int);
+void selection_sort(int*, int);
+void insertion_sort(int*, int);
+void merge_sort(int*, int, int);
+void merge(int*, int, int, int);
+void swap(int*, int*);
 
 int main(){
     srand(time(NULL));
@@ -38,25 +38,26 @@ int main(){
     clock_t inicio = clock();
     switch(c){
         case 'B':
-            bubble(datos,n);
+            bubble_sort(datos,n);
             break;
         case 'S':
             selection_sort(datos,n);
             break;
         case 'I':
-            insertion(datos,n);
+            insertion_sort(datos,n);
             break;
         case 'M':
             merge_sort(datos, 0, n - 1);
             break;
         default:
             printf("Error: Opcion no valida\n");
+            c = '\0';
     }
     clock_t fin = clock();
     double tiempo_usado = ((double)(fin - inicio)) / CLOCKS_PER_SEC;
     printf("Ordenamiento finalizado despues de %f segundos\n", tiempo_usado);
     
-    if(n < 50)
+    if(n < 50 && c != '\0')
         print_arr(datos,n);
 
     printf("\n");
@@ -66,27 +67,21 @@ int main(){
 }
 
 void gen_arr(int* arr, int n){
-
     int min = -10000;
     int max = 10000;
 
-
     for (int i = 0; i < n; i++) 
         arr[i] = min + rand() % (max - min + 1);
-
-    return;
 }
 
-void print_arr(int* arr,int n){
+void print_arr(int* arr, int n){
     for(int i = 0;i < n; i++)
         printf("%d  ",*(arr+i));
     
     printf("\n");
-
-    return;
 }
 
-void bubble(int* arr, int n){
+void bubble_sort(int* arr, int n){
     int fin = n - 1;
 
     while(fin > 0){
@@ -101,10 +96,22 @@ void bubble(int* arr, int n){
         }
         fin = nuevo_fin;
     }
-    return;
 }
 
-void insertion(int* arr, int n){
+void selection_sort(int *A, int n){
+    for(int i = 0; i < n - 1; ++i){
+        int inx_min = i;
+        for(int j = i + 1; j < n ; ++j){
+            if(A[j] < A[inx_min]) 
+                inx_min = j;
+        }
+        int temp = A[i];
+        A[i] = A[inx_min];
+        A[inx_min] = temp;        
+    }
+}
+
+void insertion_sort(int* arr, int n){
     for(int i=1;i<n;i++){
         int key = arr[i];
         int j=i;
@@ -114,9 +121,8 @@ void insertion(int* arr, int n){
         }
         arr[j] = key;
     }
-
-    return;
 }
+
 void merge_sort(int *A, int p, int r) {
     if (p < r) {
         int q = p + (r - p) / 2;
@@ -127,7 +133,7 @@ void merge_sort(int *A, int p, int r) {
 }
 // _ _ _ _ _ _ _ _ _ _ 
 // p       q         r
-void merge(int *A,int p,int q,int r){
+void merge(int *A, int p, int q, int r){
     int n1 = q - p + 1;
     int n2 = r - q;
     int *L = malloc((n1 + 1)*sizeof(int));
@@ -159,20 +165,4 @@ void merge(int *A,int p,int q,int r){
     
     free(L);
     free(R);
-}
-
-void selection_sort(int *A, int n){
-    for(int i = 0; i < n - 1; ++i){
-        int inx_min = i;
-        for(int j =  i + 1; j < n ; ++j){
-            if(*(A+j) < *(A+inx_min)) inx_min = j;
-        }
-        swap((A+i),(A+inx_min));
-    }
-}
-void swap(int *a,int *b){
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
 }
