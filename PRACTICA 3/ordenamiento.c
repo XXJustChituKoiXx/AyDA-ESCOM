@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#define INFINITO 99999999
+#define INFINITO 999999999
 
 void gen_arr(int*, int);
 void print_arr(int*, int);
@@ -88,6 +88,8 @@ void print_arr(int* arr, int n){
 }
 
 void bubble_sort(int* arr, int n){
+    //f(n) = n(n+1)/2
+    //O(n) = O(n^2)
     int flag;
     for(int i = 0; i<n-1 ; ++i){
         flag = 0;
@@ -102,6 +104,8 @@ void bubble_sort(int* arr, int n){
 }
 
 void selection_sort(int *A, int n){
+    //f(n) = 5n - 3 + [(n^2 + n -2) + (3n^2 - 3n)]/2
+    //O(n) = O(n^2)
     for(int i = 0; i < n - 1; ++i){
         int inx_min = i;
         for(int j = i + 1; j < n ; ++j){
@@ -111,8 +115,6 @@ void selection_sort(int *A, int n){
         if(inx_min != i) swap((A + i),(A + inx_min));        
     }
 }
-
-
 
 void insertion_sort(int* arr, int n){
     for(int i=1;i<n;i++){
@@ -137,6 +139,8 @@ void merge_sort(int *A, int p, int r) {
 // _ _ _ _ _ _ _ _ _ _ 
 // p       q         r
 void merge(int *A, int p, int q, int r){
+    //f(n) = 5n+2
+    //θ(n) = θ(n)
     int n1 = q - p + 1;
     int n2 = r - q;
     int *L = malloc((n1 + 1)*sizeof(int));
@@ -146,16 +150,14 @@ void merge(int *A, int p, int q, int r){
     for(i = 0; i < n1; ++i){
         *(L+i) = *(A + p + i);
     }
-    *(L+i) = INFINITO;
-    
     for(j = 0; j < n2; ++j){
         *(R+j) = *(A + q + 1 + j);
     }
+    *(L+i) = INFINITO;
     *(R+j) = INFINITO;
-    
-
     i = 0;
     j = 0;
+    
     for(int k = p; k <= r; ++k){
         if(*(L + i) <= *(R + j)){
             *(A + k) = *(L + i);
@@ -165,7 +167,6 @@ void merge(int *A, int p, int q, int r){
             j++;
         }
     }
-    
     free(L);
     free(R);
 }
