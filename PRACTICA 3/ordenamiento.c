@@ -117,6 +117,8 @@ void selection_sort(int *A, int n){
 }
 
 void insertion_sort(int* arr, int n){
+    //f(n) = n(n+1) / 2
+    //O(n) = O(n^2)
     for(int i=1;i<n;i++){
         int key = arr[i];
         int j=i;
@@ -129,18 +131,19 @@ void insertion_sort(int* arr, int n){
 }
 
 void merge_sort(int *A, int p, int r) {
+    //D(n) = θ(1) , C(n) = θ(n), cantidad de subroblemas es  T(n) = 2T(n/2) = nlog(n)  -> nlog(n) + n   
     if (p < r) {
-        int q = p + (r - p) / 2;
-        merge_sort(A, p, q);
+        int q = p + (r - p) / 2; //1
+        merge_sort(A, p, q);     
         merge_sort(A, q + 1, r);
-        merge(A, p, q, r);
+        merge(A, p, q, r);   
     }
 }
 // _ _ _ _ _ _ _ _ _ _ 
 // p       q         r
 void merge(int *A, int p, int q, int r){
     //f(n) = 5n+2
-    //θ(n) = θ(n)
+    //C(n) = θ(n)
     int n1 = q - p + 1;
     int n2 = r - q;
     int *L = malloc((n1 + 1)*sizeof(int));
