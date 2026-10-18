@@ -3,20 +3,40 @@
 #include <time.h>
 #include <ctype.h>
 
-char *pivote_mode = 'r';
+char pivote_mode = 'r';
+void swap(int* a, int* b);
+int partition(int* A, int p, int r);
+void quicksort(int* A, int p, int r);
 
-void quicksort(int*,int,int);
-int partition(int*,int,int);
-
-void quicksort(int*A,int p,int r){
-    if(p<r){
-        int q = partition(A,p,r);
-        quicksort(A,p,q-1);
-        quicksort(A,q,r);
+void quicksort(int* A, int p, int r){
+    while(p < r){
+        int q = partition(A, p, r);
+        if (q - p < r - q) {
+            quicksort(A, p, q - 1);
+            p = q + 1;             
+        } else {
+            quicksort(A, q + 1, r);
+            r = q - 1;
+        }
     }
 }
+
 int partition(int* A,int p,int r){
-    
+    int x,i;
+    if(pivote_mode == 'r'){
+        x =  p + rand() % (r - p + 1);
+        swap(A + r, A + x);
+    }
+    x = r;
+    i = p - 1;
+    for(int j = p; j < r; ++j){
+        if(*(A + j) < *(A + x)){
+            i++;
+            swap(A + i, A + j);
+        }
+    }
+    swap(A + i + 1, A + x);
+    return i + 1;
 }
 
 void rellenarArrayRandom(int* A, int n){
@@ -28,47 +48,60 @@ void rellenarArrayOrdenado(int* A, int n){
     double min_val = -100000;
     double max_val = 100000;
     if(n == 1){
-        *A = min_val;
+        *A = (int) min_val;
         return;
     }
     double paso;
     paso = (max_val - min_val) / (n - 1);
     for(int i = 0; i < n;i++){ 
-        *(A + i) = (double)(min_val + i*paso);
+        *(A + i) = (int)(min_val + i*paso);
     }
 }
 
-void print_array(char* A, int tam){
+void print_array(int* A, int tam){
     int i = 0;
     while(i < tam && i < 100){
-        printf("%d", *(A + i));
+        printf("%d ", *(A + i));
         i++;
     }
 }
+
+void swap(int* a, int*b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+
 void main(){
     int* array;
-    double tam,tiempo_segundos;
-    char* array_mode;
+    int tam;
+    double tiempo_segundos;
+    char array_mode;
     clock_t inicio,fin;
-
+    srand(time(NULL));
     //crear array de numeros
-    tam = scanf("\n Ingrese tamaño del arreglo: %d",&tam);
+    printf("\n Ingrese tamaño del arreglo: ");
+    scanf("%d",&tam);
+    while (getchar() != '\n');
     array = malloc(sizeof(int)*tam);
     
     //establecer donde se elegira el pivote, al inicio o final.
     do{
-        printf("\n Ingrese posicion del Pivote: \n Random: r \n Ultimo: f");
+        printf("\n Ingrese posicion del Pivote: \n Random: r \n Ultimo: f \n");
         pivote_mode = fgetc(stdin);
-        tolower(pivote_mode);
-        if(pivote_mode != 'r' && pivote_mode != 'f') printf("\n Solo puede seleccionar 'r' o 'f'.");
+        pivote_mode = tolower(pivote_mode);
+        while (getchar() != '\n');
+        if(pivote_mode != 'r' && pivote_mode != 'f') printf("\n Solo puede seleccionar 'r' o 'f'.\n");
     }while(pivote_mode != 'r' && pivote_mode != 'f');
     
     //definir si el arreglo estara ordenado o desordenado
     do{
-        printf("\n Ingrese Estado del Arreglo: \n Ordenado: o \n Desordenado: r");
+        printf("\n Ingrese Estado del Arreglo: \n Ordenado: o \n Desordenado: r\n");
         array_mode = fgetc(stdin);
-        tolower(array_mode);
-        if(array_mode != 'o' && array_mode != 'r') printf("\n Solo puede seleccionar 'r' u 'o'.");
+        array_mode = tolower(array_mode);
+        while (getchar() != '\n');
+        if(array_mode != 'o' && array_mode != 'r') printf("\n Solo puede seleccionar 'r' u 'o'.\n");
     }while(array_mode != 'o' && array_mode != 'r');
     
     //rellenar arreglo
@@ -77,13 +110,13 @@ void main(){
         rellenarArrayOrdenado(array,tam);
         fin = clock();
         tiempo_segundos = (double) (fin - inicio) / CLOCKS_PER_SEC;
-        printf("\n Tiempo en llenar arreglo ordenado: %d",tiempo_segundos);
+        printf("\n Tiempo en llenar arreglo ordenado: %f s.",tiempo_segundos);
     }else if (array_mode == 'r'){
         inicio = clock();
         rellenarArrayRandom(array,tam);
         fin = clock();
         tiempo_segundos = (double) (fin - inicio) / CLOCKS_PER_SEC;
-        printf("\n Tiempo en llenar arreglo random: %d",tiempo_segundos);
+        printf("\n Tiempo en llenar arreglo random: %f s.",tiempo_segundos);
     }
     printf("\n Arreglo desordenado(solo hasta 100 elementos):");
     print_array(array,tam);
@@ -97,16 +130,16 @@ void main(){
     printf("\n Arreglo ordenado(solo hasta 100 elementos):");
     print_array(array,tam);
 
-    if(pivote_mode == "f" && array_mode == "o") 
-        printf("Tiempo de ordenamiento para un arreglo Ordenado y el pivote al en la ultima posicion %d", tiempo_segundos);
+    if(pivote_mode == 'f' && array_mode == 'o') 
+        printf("\nTiempo de ordenamiento para un arreglo Ordenado y el pivote al en la ultima posicion: %f.", tiempo_segundos);
     
-    if(pivote_mode == "r" && array_mode == "o") 
-        printf("Tiempo de ordenamiento para un arreglo Ordenado y el pivote en una posicion random: %d", tiempo_segundos);
+    if(pivote_mode == 'r' && array_mode == 'o') 
+        printf("\nTiempo de ordenamiento para un arreglo Ordenado y el pivote en una posicion random: %f.", tiempo_segundos);
     
-    if(pivote_mode == "f" && array_mode == "r") 
-        printf("Tiempo de ordenamiento para un arreglo desordenado y el pivote al en la ultima posicion %d", tiempo_segundos);
+    if(pivote_mode == 'f' && array_mode == 'r') 
+        printf("\nTiempo de ordenamiento para un arreglo desordenado y el pivote al en la ultima posicion: %f.", tiempo_segundos);
     
-    if(pivote_mode == "r" && array_mode == "r") 
-        printf("Tiempo de ordenamiento para un arreglo desordenado y el pivote en una posicion random: %d", tiempo_segundos);
+    if(pivote_mode == 'r' && array_mode == 'r') 
+        printf("\nTiempo de ordenamiento para un arreglo desordenado y el pivote en una posicion random: %f.", tiempo_segundos);
     free(array);
 }
