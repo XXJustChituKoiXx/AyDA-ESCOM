@@ -78,7 +78,7 @@ void swap(int* a, int*b){
 }
 
 
-int main(){
+void main(){
     int* array;
     int tam;
     double tiempo_segundos;
@@ -153,6 +153,4 @@ int main(){
 
     printf("\n");
     free(array);
-
-    return 0;
 }
