@@ -92,7 +92,7 @@ void main(){
     array = malloc(sizeof(int)*tam);
     if(array == NULL){
         printf("\n Error al asignar memoria para el arreglo.\n");
-        return 1;
+        return;
     }
     
     //establecer donde se elegira el pivote, al inicio o final.
