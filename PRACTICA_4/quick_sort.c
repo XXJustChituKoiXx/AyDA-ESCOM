@@ -41,10 +41,11 @@ int partition(int* A,int p,int r){
 
 void rellenarArrayRandom(int* A, int n){
     for(int i = 0; i < n;i++){
-        *(A + i) = -100000 + rand() % (100000 - (-100000) + 1);
+        *(A + i) = -100000 + rand() % (200001);
     }
 }
 void rellenarArrayOrdenado(int* A, int n){
+    /*
     double min_val = -100000;
     double max_val = 100000;
     if(n == 1){
@@ -55,6 +56,10 @@ void rellenarArrayOrdenado(int* A, int n){
     paso = (max_val - min_val) / (n - 1);
     for(int i = 0; i < n;i++){ 
         *(A + i) = (int)(min_val + i*paso);
+    }
+    */
+    for(int i = 0; i < n;i++){ 
+        *(A + i) = i;
     }
 }
 
@@ -73,7 +78,7 @@ void swap(int* a, int*b){
 }
 
 
-void main(){
+int main(){
     int* array;
     int tam;
     double tiempo_segundos;
@@ -81,10 +86,14 @@ void main(){
     clock_t inicio,fin;
     srand(time(NULL));
     //crear array de numeros
-    printf("\n Ingrese tamaño del arreglo: ");
+    printf("\n Ingrese la longitud del arreglo: ");
     scanf("%d",&tam);
     while (getchar() != '\n');
     array = malloc(sizeof(int)*tam);
+    if(array == NULL){
+        printf("\n Error al asignar memoria para el arreglo.\n");
+        return 1;
+    }
     
     //establecer donde se elegira el pivote, al inicio o final.
     do{
@@ -118,7 +127,7 @@ void main(){
         tiempo_segundos = (double) (fin - inicio) / CLOCKS_PER_SEC;
         printf("\n Tiempo en llenar arreglo random: %f s.",tiempo_segundos);
     }
-    printf("\n Arreglo desordenado(solo hasta 100 elementos):");
+    printf("\n Arreglo generado antes de ordenadar(Primeros 100 elementos): \n");
     print_array(array,tam);
     
     //ordenamiento
@@ -127,19 +136,23 @@ void main(){
     fin = clock();
     tiempo_segundos = (double) (fin - inicio) / CLOCKS_PER_SEC;
     
-    printf("\n Arreglo ordenado(solo hasta 100 elementos):");
+    printf("\n Arreglo despues de ordenar(Primeros 100 elementos): \n");
     print_array(array,tam);
 
     if(pivote_mode == 'f' && array_mode == 'o') 
-        printf("\nTiempo de ordenamiento para un arreglo Ordenado y el pivote al en la ultima posicion: %f.", tiempo_segundos);
+        printf("\nTiempo de ordenamiento para un arreglo ordenado de %d elementos y el pivote al en la ultima posicion: %f s.", tam, tiempo_segundos);
     
     if(pivote_mode == 'r' && array_mode == 'o') 
-        printf("\nTiempo de ordenamiento para un arreglo Ordenado y el pivote en una posicion random: %f.", tiempo_segundos);
+        printf("\nTiempo de ordenamiento para un arreglo ordenado de %d elementos y el pivote en una posicion aleatoria: %f s.", tam, tiempo_segundos);
     
     if(pivote_mode == 'f' && array_mode == 'r') 
-        printf("\nTiempo de ordenamiento para un arreglo desordenado y el pivote al en la ultima posicion: %f.", tiempo_segundos);
+        printf("\nTiempo de ordenamiento para un arreglo desordenado de %d elementos y el pivote al en la ultima posicion: %f s.", tam, tiempo_segundos);
     
     if(pivote_mode == 'r' && array_mode == 'r') 
-        printf("\nTiempo de ordenamiento para un arreglo desordenado y el pivote en una posicion random: %f.", tiempo_segundos);
+        printf("\nTiempo de ordenamiento para un arreglo desordenado de %d elementos y el pivote en una posicion aleatoria: %f s.", tam, tiempo_segundos);
+
+    printf("\n");
     free(array);
+
+    return 0;
 }
