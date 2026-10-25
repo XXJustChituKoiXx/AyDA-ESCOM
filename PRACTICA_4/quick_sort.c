@@ -21,21 +21,21 @@ void quicksort(int* A, int p, int r){
     }
 }
 
-int partition(int* A,int p,int r){
-    int x,i;
+int partition(int* A, int p, int r){
+    int x, i;
     if(pivote_mode == 'r'){
-        x =  p + rand() % (r - p + 1);
+        x = p + rand() % (r - p + 1);
         swap(A + r, A + x);
     }
-    x = r;
+     
     i = p - 1;
     for(int j = p; j < r; ++j){
-        if(*(A + j) < *(A + x)){
+        if(*(A + j) < *(A + r)){
             i++;
             swap(A + i, A + j);
         }
     }
-    swap(A + i + 1, A + x);
+    swap(A + i + 1, A + r);
     return i + 1;
 }
 
