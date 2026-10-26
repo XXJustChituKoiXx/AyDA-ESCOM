@@ -203,19 +203,19 @@ char* binario_a_decimal(int *bits, int n) {
 }
 
 int main() {
-    char *xDecimal = calloc(35, sizeof(char));
-    char *yDecimal = calloc(35, sizeof(char));
+    char *xDecimal = calloc(1000, sizeof(char));
+    char *yDecimal = calloc(1000, sizeof(char));
 
     int *x = calloc(CAP, sizeof(int));
     int *y = calloc(CAP, sizeof(int));
 
     // Lee los dos numeros decimales
     printf("Primer numero: ");
-    if (fgets(xDecimal, 35, stdin) == NULL)
+    if (fgets(xDecimal, 1000, stdin) == NULL)
         return 1;
 
     printf("Segundo numero: ");
-    if (fgets(yDecimal, 35, stdin) == NULL)
+    if (fgets(yDecimal, 1000, stdin) == NULL)
         return 1;
 
     // Elimina los saltos de linea
@@ -227,11 +227,6 @@ int main() {
     if (saltoY != NULL)
         *saltoY = '\0';
 
-    // Verifica que no superen los 32 digitos
-    if (strlen(xDecimal) > 32 || strlen(yDecimal) > 32) {
-        printf("Error: maximo 32 digitos por numero.\n");
-        return 1;
-    }
 
     // Verifica que las entradas sean numericas
     for (int i = 0; *(xDecimal+i) != '\0'; i++) {
