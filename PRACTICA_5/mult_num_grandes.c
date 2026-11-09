@@ -42,9 +42,7 @@ int* restar(int *x, int nx, int *y, int ny) {
     return R;
 }
 
-// Combina los resultados parciales usando la formula:
 // xy = z2 * 2^(2*m) + z1 * 2^m + z0.
-// Suma x (de nx bits) a R (de nR bits) desplazado 'desplazamiento' posiciones.
 void sumar_desplazado(int *R, int nR, int *x, int nx, int desplazamiento) {
     int acarreo = 0;
     int posicion = desplazamiento;
@@ -91,33 +89,28 @@ int* multiplicar_base(int *x, int *y, int n) {
     return R;
 }
 
-// Multiplica dos numeros de n bits. El resultado tiene 2*n bits
 int* karatsuba(int *x, int *y, int n) {
-    if (n <= 3)
-        return multiplicar_base(x, y, n);
+    if (n <= 3) return multiplicar_base(x, y, n);
 
     int m = n / 2;
     int alto = n - m;
-
-    // Divide los numeros en mitades. La parte baja se rellena con ceros
-    // hasta 'alto' bits para poder sumarla con la parte alta
-    int *xBajo = calloc(alto, sizeof(int));
-    int *yBajo = calloc(alto, sizeof(int));
-    int *xAlto = x + m;
-    int *yAlto = y + m;
-
+    // Divide los numeros en mitades. La parte derecha se rellena con ceros hasta 'n/2' bits para poder sumarla con la parte izquierda
+    int *Xd = calloc(alto, sizeof(int));
+    int *Yd = calloc(alto, sizeof(int));
+    int *Xi = x + m;
+    int *Yi = y + m;
     for (int i = 0; i < m; i++) {
-        *(xBajo+i) = *(x+i);
-        *(yBajo+i) = *(y+i);
+        *(Xd+i) = *(x+i);
+        *(Yd+i) = *(y+i);
     }
 
-    int *z0 = karatsuba(xBajo, yBajo, m);       // 2*m bits
-    int *z2 = karatsuba(xAlto, yAlto, alto);    // 2*alto bits
+    int *z0 = karatsuba(Xd, Yd, m);      
+    int *z2 = karatsuba(Xi, Yi, alto);   
 
-    int *sumaX = sumar(xAlto, xBajo, alto);     // alto+1 bits
-    int *sumaY = sumar(yAlto, yBajo, alto);     // alto+1 bits
+    int *sumaX = sumar(Xi, Xd, alto);     
+    int *sumaY = sumar(Yi, Yd, alto);    
 
-    int *z1 = karatsuba(sumaX, sumaY, alto+1);  // 2*(alto+1) bits
+    int *z1 = karatsuba(sumaX, sumaY, alto+1);  
 
     // Obtiene el producto cruzado
     int *aux = restar(z1, 2*(alto+1), z0, 2*m);
@@ -125,13 +118,12 @@ int* karatsuba(int *x, int *y, int n) {
 
     int *R = calloc(2*n, sizeof(int));
 
-    // Combina los resultados mediante desplazamientos
     sumar_desplazado(R, 2*n, z2, 2*alto, 2*m);
     sumar_desplazado(R, 2*n, cruzado, 2*(alto+1), m);
     sumar_desplazado(R, 2*n, z0, 2*m, 0);
 
-    free(xBajo);
-    free(yBajo);
+    free(Xd);
+    free(Yd);
     free(z0);
     free(z1);
     free(z2);
@@ -212,25 +204,14 @@ char* binario_a_decimal(int *bits, int n) {
     return resultado;
 }
 
-// Lee una linea de hasta MAX_DIGITOS caracteres. Regresa 0 si es demasiado larga
+// Lee una linea de hasta MAX_DIGITOS. Regresa 0 si es demasiado larga
 int leer_numero(char *buffer) {
     if (fgets(buffer, MAX_DIGITOS + 2, stdin) == NULL)
         return 0;
-
     char *salto = strchr(buffer, '\n');
     if (salto != NULL) {
         *salto = '\0';
-    } else if (!feof(stdin)) {
-        // La linea no cupo en el buffer: descarta el resto
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);
-        return 0;
     }
-
-    // Elimina el retorno de carro en Windows
-    char *retorno = strchr(buffer, '\r');
-    if (retorno != NULL)
-        *retorno = '\0';
 
     return 1;
 }
@@ -239,7 +220,6 @@ int main() {
     char *xDecimal = calloc(MAX_DIGITOS + 2, sizeof(char));
     char *yDecimal = calloc(MAX_DIGITOS + 2, sizeof(char));
 
-    // Lee los dos numeros decimales y verifica que no superen MAX_DIGITOS
     printf("Primer numero: ");
     if (!leer_numero(xDecimal)) {
         printf("Error: maximo %d digitos por numero.\n", MAX_DIGITOS);
@@ -252,7 +232,6 @@ int main() {
         return 1;
     }
 
-    // Verifica que las entradas sean numericas y no esten vacias
     if (*xDecimal == '\0' || *yDecimal == '\0') {
         printf("Entrada invalida.\n");
         return 1;
@@ -280,7 +259,6 @@ int main() {
     int nx = decimal_a_binario(xDecimal, bitsX);
     int ny = decimal_a_binario(yDecimal, bitsY);
 
-    // Ajusta la longitud a una potencia de dos
     int n = nx > ny ? nx : ny;
     int potencia = 1;
 
@@ -295,10 +273,8 @@ int main() {
     memcpy(x, bitsX, nx * sizeof(int));
     memcpy(y, bitsY, ny * sizeof(int));
 
-    // Multiplica usando Karatsuba (el resultado tiene 2*n bits)
     int *R = karatsuba(x, y, n);
 
-    // Convierte el resultado a decimal
     char *resultado = binario_a_decimal(R, 2*n);
 
     printf("Resultado: %s\n", resultado);

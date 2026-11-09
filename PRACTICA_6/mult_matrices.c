@@ -3,10 +3,10 @@
 #include <time.h>
 
 /* 
-    Tamano a partir del cual se deja de dividir con strassen y se
+    Tamaño a partir del cual se deja de dividir con strassen y se
     utiliza el algoritmo tradicional
  */
-#define UMBRAL 32
+#define UMBRAL 64
 
 /*
     Estructura de submatriz por calculo de indices:

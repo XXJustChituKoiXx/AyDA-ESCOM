@@ -1,7 +1,5 @@
-# Tabla de comparacion de algortimos
-
-| Entrada | Algoritmo tradicional | Algoritmo de Strassen |
+| Entrada | Algoritmo tradicional ($n^3$) | Algoritmo de Strassen ($n^{2.8}$) |
 | :--- | :---: | :---: |
-| 2 | 2 | 2 |
-| 2 | 2 | 2 |
-
+| $2^{14} = 16,384$ | 2hrs | 1.5 horas |
+| $2^{15} = 32,768$ | +2hrs | 2hrs |
+| $2^{16} = 65,536$ | +2hrs | +2hrs |
