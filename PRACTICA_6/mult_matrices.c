@@ -3,7 +3,7 @@
 #include <time.h>
 
 /* 
-    Tamaño a partir del cual se deja de dividir con strassen y se
+    (CASO BASE) Tamaño a partir del cual se deja de dividir con strassen y se
     utiliza el algoritmo tradicional
  */
 #define UMBRAL 64
@@ -222,7 +222,7 @@ void resta_sub_mat(Sub X, Sub Y, Sub Z, int n){
 /* Regresa 0 si todo salio bien, 1 si hubo error de memoria. */
 int strassen(Sub A, Sub B, Sub C, int n){
 
-    /* Caso base: con UMBRAL = 1 es solo c11 = a11 * b11 */
+    /* Caso base */
     if(n <= UMBRAL){
         for(int i = 0; i < n; i++)
             for(int j = 0; j < n; j++){
@@ -236,7 +236,7 @@ int strassen(Sub A, Sub B, Sub C, int n){
 
     int m = n / 2;
 
-    /* ===== Paso 1: dividir A, B y ===== */
+    /* ===== Paso 1: dividir ===== */
     Sub A11 = cuadrante(A, 0, 0, m), A12 = cuadrante(A, 0, 1, m);
     Sub A21 = cuadrante(A, 1, 0, m), A22 = cuadrante(A, 1, 1, m);
 
@@ -291,7 +291,7 @@ int strassen(Sub A, Sub B, Sub C, int n){
         }
     }
 
-    /* Liberar auxiliares */
+
     for(int k = 1; k <= 10; k++) liberar_matriz(S[k]);
     for(int k = 1; k <= 7; k++)  liberar_matriz(P[k]);
 
